@@ -26,7 +26,19 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by kongxiaojun on 2019-12-10.
+ * Copyright 2019 kongxiaojun
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 public class SpaPermissions {
 
@@ -146,7 +158,7 @@ public class SpaPermissions {
      */
     public boolean hasPermission(@Nullable Context context, @NonNull String permission) {
         return context != null && (checkSelfPermission(context, permission)
-                == PackageManager.PERMISSION_GRANTED );
+                == PackageManager.PERMISSION_GRANTED);
     }
 
     /**
@@ -155,9 +167,9 @@ public class SpaPermissions {
      * 1. We receive the result through ActivityCompat.PermissionCompatDelegate. Here we need to call the hidden gray api reflection: buildRequestPermissionsIntent. Gray API list reference：https://android.googlesource.com/platform/frameworks/base/+/pie-release/config/hiddenapi-light-greylist.txt
      * 2. If the first step fails, such as a reflection call to a hidden gray API exception. Then start a SpaPermissionsFragment, request permissions through the empty SpaPermissionsFragment, and receive the result.
      *
-     * @param fragmentActivity    the fragmentActivity necessary to request the permissions.
-     * @param permissions the list of permissions to request for the {@link PermissionsResultAction}.
-     * @param action      the PermissionsResultAction to notify when the permissions are granted or denied.
+     * @param fragmentActivity the fragmentActivity necessary to request the permissions.
+     * @param permissions      the list of permissions to request for the {@link PermissionsResultAction}.
+     * @param action           the PermissionsResultAction to notify when the permissions are granted or denied.
      */
     public synchronized void requestPermissions(@Nullable FragmentActivity fragmentActivity,
                                                 @NonNull String[] permissions,
@@ -230,7 +242,7 @@ public class SpaPermissions {
     }
 
     private SpaPermissionsFragment findPermissionsFragment(@NonNull FragmentManager fragmentManager) {
-        return (SpaPermissionsFragment)fragmentManager.findFragmentByTag(TAG);
+        return (SpaPermissionsFragment) fragmentManager.findFragmentByTag(TAG);
     }
 
 
@@ -330,11 +342,11 @@ public class SpaPermissions {
         return permList;
     }
 
-    private boolean checkMiPhoneResult(Context context,PermissionsResultAction action,String permission ,int result){
-        if(checkSelfPermission(context,permission) == PackageManager.PERMISSION_GRANTED){
-            return action.onResult(permission,Permissions.GRANTED);
-        }else {
-            return action.onResult(permission,Permissions.DENIED);
+    private boolean checkMiPhoneResult(Context context, PermissionsResultAction action, String permission, int result) {
+        if (checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED) {
+            return action.onResult(permission, Permissions.GRANTED);
+        } else {
+            return action.onResult(permission, Permissions.DENIED);
         }
     }
 
@@ -347,43 +359,44 @@ public class SpaPermissions {
      * XiaoMi phone's permission Manager is special，try using AppOpsManager to judge whether its permission has been granted
      * this method is just for permission-group : phone & location.
      * for other phones and all sdk-ver < M ,use ActivityCompat.checkSelfPermission is Ok
+     *
      * @param context
      * @param permission
      * @return
      */
-    private int checkSelfPermission(Context context, String permission){
+    private int checkSelfPermission(Context context, String permission) {
         if (context == null) {
             return PackageManager.PERMISSION_DENIED;
         }
         int permissionState = ActivityCompat.checkSelfPermission(context, permission);
-        if(permissionState != PackageManager.PERMISSION_GRANTED){
+        if (permissionState != PackageManager.PERMISSION_GRANTED) {
             return permissionState;
         }
 
-        if(android.os.Build.VERSION.SDK_INT <android.os.Build.VERSION_CODES.M){
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             return ActivityCompat.checkSelfPermission(context, permission);
         }
         String op = "";
-        if(Manifest.permission.READ_PHONE_STATE.equals(permission)){
+        if (Manifest.permission.READ_PHONE_STATE.equals(permission)) {
             op = AppOpsManager.OPSTR_READ_PHONE_STATE;
         }
-        if(LocationPermissions.contains(permission)){
+        if (LocationPermissions.contains(permission)) {
             op = AppOpsManager.OPSTR_FINE_LOCATION;
         }
-        if(TextUtils.isEmpty(op)){
+        if (TextUtils.isEmpty(op)) {
             return ActivityCompat.checkSelfPermission(context, permission);
         }
-        try{
+        try {
             AppOpsManager ops = context.getSystemService(AppOpsManager.class);
             int mode = ops.checkOp(op, Process.myUid(), context.getPackageName());
-            Log.d(TAG,"mode = "  + mode);
+            Log.d(TAG, "mode = " + mode);
             if (mode == AppOpsManager.MODE_ALLOWED) {
                 //Accurate judgment for xiaomi
                 return PackageManager.PERMISSION_GRANTED;
             } else {
                 return PackageManager.PERMISSION_DENIED;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
         }
         return ActivityCompat.checkSelfPermission(context, permission);
 
