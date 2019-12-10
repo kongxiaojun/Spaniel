@@ -1,14 +1,12 @@
 # Spaniel
 
-> A simple and lightweight Android permission application framework.
+> 一款简单轻巧的Android应用程序权限申请框架。
 
-[中文文档](https://github.com/kongxiaojun/Spaniel/blob/master/README_CN.md)
-
-Efficiently obtain permissions. Internally, we obtain authorization through reflection calls to hidden APIs or newly created fragments. Frees the caller from having to care about the Activity / Fragment's onRequestPermissionsResult method.
+高效的申请权限，在内部我们使用了反射调用隐藏API与添加新Fragment的方式确保权限高效稳定的申请。使用者无需关心Activity或Fragment onRequestPermissionsResult方法。
 
 ## Download
 
-Add it in your root build.gradle at the end of repositories:
+添加以下代码到最外层build.gradle:
 
 ```css
     allprojects {
@@ -19,7 +17,7 @@ Add it in your root build.gradle at the end of repositories:
     }
 ```
 
-Add the dependency
+添加引用
 
 ```css
     dependencies {
@@ -27,7 +25,7 @@ Add the dependency
     }
 ```
 
-## Usage
+## 使用方法
 
 ```java
                 SpaPermissions.getInstance().requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, new PermissionsResultAction() {
@@ -43,7 +41,7 @@ Add the dependency
                 });
 ```
 
-# References
+# 参考
 
 [https://github.com/anthonycr/Grant](https://github.com/anthonycr/Grant)
 
