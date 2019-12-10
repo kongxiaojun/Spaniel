@@ -28,17 +28,17 @@
 ## 使用方法
 
 ```java
-                SpaPermissions.getInstance().requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, new PermissionsResultAction() {
-                    @Override
-                    public void onGranted() {
-                        Toast.makeText(MainActivity.this, "onGranted", Toast.LENGTH_SHORT).show();
-                    }
+    SpaPermissions.getInstance().requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, new PermissionsResultAction() {
+        @Override
+        public void onGranted() {
+            Toast.makeText(MainActivity.this, "onGranted", Toast.LENGTH_SHORT).show();
+        }
 
-                    @Override
-                    public void onDenied(String permission) {
-                        Toast.makeText(MainActivity.this, "onDenied", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        @Override
+        public void onDenied(String permission) {
+            Toast.makeText(MainActivity.this, "onDenied", Toast.LENGTH_SHORT).show();
+        }
+    });
 ```
 
 # 参考
